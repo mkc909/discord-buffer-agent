@@ -1,0 +1,70 @@
+{
+  "contentItemOperations": [
+    "createContentItem",
+    "createContentItemDraft",
+    "promoteContentItemDraftToPosts",
+    "addPostToContentItem",
+    "removePostFromContentItem",
+    "updateContentItem",
+    "updateContentItemDraft",
+    "deleteContentItem"
+  ],
+  "createContentItemDraftInputFields": [
+    "organizationId",
+    "draft",
+    "title",
+    "tagIds",
+    "targetDate",
+    "correlationId"
+  ],
+  "createPostInputFields": [
+    "aiAssisted",
+    "assets",
+    "channelId",
+    "draftId",
+    "dueAt",
+    "ideaId",
+    "metadata",
+    "mode",
+    "needsApproval",
+    "saveToDraft",
+    "schedulingType",
+    "source",
+    "tagIds",
+    "text"
+  ],
+  "draftContentInputFields": [
+    "text",
+    "assets",
+    "aiAssisted"
+  ],
+  "notedAbsences": [
+    "tagIds on UpdateContentItemInput (post-promotion tag mutation \u2014 not in the live schema; updateContentItem with tagIds is rejected verbatim as an unknown field, TEST-BATCH T2, 2026-10-24)",
+    "archive operation or archived state (no archiveContentItem in the live schema; deleteContentItem is the only end-of-life path, TEST-BATCH T4, 2026-10-24)",
+    "PostGroup type / PostGroupId (zero occurrences in the live authenticated schema; the public type page 404s \u2014 the concept no longer exists in the API, TEST-BATCH T3, 2026-10-24)",
+    "draftId on Post (Post exposes ideaId and contentItemId but no draftId; after promotion the DraftContent is not readable through the item and no draft-by-id query exists, TEST-BATCH T1, 2026-10-24)",
+    "channelIds on PromoteContentItemDraftToPostsInput (guide-era shape; the live input is posts: [CreatePostInput!] plus optional tagIds, 2026-10-24)",
+    "top-level text on CreateContentItemDraftInput (guide-era shape; the live input nests the content under draft: DraftContentInput, 2026-10-24)"
+  ],
+  "postFields": [
+    "id",
+    "contentItemId",
+    "ideaId"
+  ],
+  "promoteContentItemDraftToPostsInputFields": [
+    "id",
+    "posts",
+    "tagIds"
+  ],
+  "snapshotDate": "2026-10-24",
+  "source": "Buffer live schema via authenticated introspect_schema (MCP) + live execute_query/execute_mutation run, 2026-10-24 \u2014 ~/workspace/buffer-project/TEST-BATCH.md results + schema-drift sections. (Supersedes the 2026-10-23 docs-based snapshot; the guide-era shapes for createContentItemDraft and promoteContentItemDraftToPosts in those docs do not match the live API.) API status: Experimental.",
+  "updateContentItemInputFields": [
+    "id",
+    "title",
+    "targetDate"
+  ],
+  "lastVerified": "2026-10-31",
+  "driftNotes": [
+    "2026-10-31 re-verification (hackathon lane): ContentItem operations + CreateContentItemDraftInput + DraftContentInput + PromoteInput + UpdateContentItemInput IDENTICAL to this pin; CreatePostInput gained additive fields only (aiAssisted, draftId, ideaId, needsApproval, source \u2014 pin updated to the full live list); all notedAbsences still hold (PostGroup zero occurrences, no archive op, no draftId on Post). Two surface changes outside this pin: (1) Buffer's hosted MCP server dropped its advanced trio (introspect_schema/execute_query/execute_mutation) \u2014 17 tools listed 2026-10-31 vs 20 on 2026-10-24 \u2014 the drift watcher's schema source was moved to direct GraphQL introspection the same day; (2) add/remove relationship payloads are Success | VoidMutationError unions (no *Failure type, no message on Success) \u2014 agent + proxy documents corrected and live-verified 2026-10-31. Verbatim curiosity: a deleted ContentItem reads back NOT_FOUND with message 'PostGroup not found'."
+  ]
+}
