@@ -1,0 +1,24 @@
+# Discord Buffer Agent — Cloudflare Worker configuration.
+# PLACEHOLDERS ONLY: no real account IDs, tokens, or secrets live in this file.
+# Secrets are set with `wrangler secret put <NAME>` (see README "Secrets").
+name = "discord-buffer-agent"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Durable Object: the per-org publishing agent (Cloudflare Agents SDK).
+[[durable_objects.bindings]]
+name = "PUBLISHING_AGENT"
+class_name = "PublishingAgent"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PublishingAgent"]
+
+# Drift watcher: check Buffer's published ContentItem surface every 6 hours.
+[triggers]
+crons = ["0 */6 * * *"]
+
+# Non-secret configuration can go here as [vars]. Secrets must NOT go here.
+# [vars]
+# EXAMPLE = "value"
